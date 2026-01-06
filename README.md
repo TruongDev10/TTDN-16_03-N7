@@ -4,7 +4,7 @@
     </a>
 </h2>
 <h2 align="center">
-    PLATFORM ERP
+    QUẢN LÝ DỰ ÁN VÀ QUẢN LÝ CÔNG VIỆC
 </h2>
 <div align="center">
     <p align="center">
