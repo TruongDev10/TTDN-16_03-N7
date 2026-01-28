@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_projects" name="Dự án của tôi">
+        <t t-call="portal.portal_layout">
+            <t t-set="title">Dự án</t>
+            <div class="o_portal">
+                <div class="o_portal_docs">
+                    <div class="o_portal_docs_header">
+                        <h3>Dự án của tôi</h3>
+                    </div>
+                    <div class="o_portal_docs_content">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Tên dự án</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>Trạng thái</th>
+                                    <th>Tiến độ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="projects" t-as="project">
+                                    <tr>
+                                        <td><a t-attf-href="/my/projects/#{project.id}"><t t-esc="project.code"/></a></td>
+                                        <td><t t-esc="project.name"/></td>
+                                        <td><t t-esc="project.date_start"/></td>
+                                        <td><t t-esc="project.date_end"/></td>
+                                        <td><span class="badge badge-info"><t t-esc="dict(project._fields['state'].selection)[project.state]"/></span></td>
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" t-attf-style="width: #{project.progress}%">
+                                                    <t t-esc="project.progress"/>%
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_project_page" name="Chi tiết Dự án">
+        <t t-call="portal.portal_layout">
+            <t t-set="title" t-esc="project.name"/>
+            <div class="o_portal">
+                <div class="o_portal_docs">
+                    <div class="o_portal_docs_header">
+                        <h3><t t-esc="project.name"/></h3>
+                    </div>
+                    <div class="o_portal_docs_content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Thông tin dự án</h4>
+                                <table class="table">
+                                    <tr>
+                                        <td>Mã dự án:</td>
+                                        <td><t t-esc="project.code"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày bắt đầu:</td>
+                                        <td><t t-esc="project.date_start"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày kết thúc:</td>
+                                        <td><t t-esc="project.date_end"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trạng thái:</td>
+                                        <td><span class="badge badge-info"><t t-esc="dict(project._fields['state'].selection)[project.state]"/></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tiến độ:</td>
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" t-attf-style="width: #{project.progress}%">
+                                                    <t t-esc="project.progress"/>%
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Mô tả</h4>
+                                <div t-raw="project.description or ''"/>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Công việc</h4>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên công việc</th>
+                                            <th>Ngày deadline</th>
+                                            <th>Trạng thái</th>
+                                            <th>Tiến độ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="project.task_ids" t-as="task">
+                                            <tr>
+                                                <td><a t-attf-href="/my/tasks/#{task.id}"><t t-esc="task.name"/></a></td>
+                                                <td><t t-esc="task.date_deadline"/></td>
+                                                <td><span class="badge badge-info"><t t-esc="dict(task._fields['state'].selection)[task.state]"/></span></td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" t-attf-style="width: #{task.progress}%">
+                                                            <t t-esc="task.progress"/>%
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

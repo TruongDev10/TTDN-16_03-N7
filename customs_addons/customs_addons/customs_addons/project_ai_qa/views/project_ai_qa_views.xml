@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Danh sách Q&A -->
+    <record id="view_project_ai_qa_tree" model="ir.ui.view">
+        <field name="name">project.ai.qa.tree</field>
+        <field name="model">project.ai.qa</field>
+        <field name="arch" type="xml">
+            <tree string="AI Q&amp;A" decoration-info="state=='processing'" decoration-success="state=='done'" decoration-danger="state=='error'">
+                <field name="create_date"/>
+                <field name="question"/>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="state" widget="badge" decoration-info="state=='processing'" decoration-success="state=='done'" decoration-danger="state=='error'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: Form Q&A -->
+    <record id="view_project_ai_qa_form" model="ir.ui.view">
+        <field name="name">project.ai.qa.form</field>
+        <field name="model">project.ai.qa</field>
+        <field name="arch" type="xml">
+            <form string="AI Q&amp;A">
+                <header>
+                    <button name="action_ask_ai" string="Hỏi AI" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['done', 'processing'])]}"/>
+                    <button name="action_test_api" string="Test API" type="object" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="task_id" domain="[('project_id', '=', project_id)]" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="ai_model"/>
+                            <field name="tokens_used" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="question" placeholder="Nhập câu hỏi của bạn về dự án..."/>
+                    </group>
+                    <notebook>
+                        <page string="Câu trả lời" name="answer">
+                            <field name="answer" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_project_ai_qa_search" model="ir.ui.view">
+        <field name="name">project.ai.qa.search</field>
+        <field name="model">project.ai.qa</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Q&amp;A">
+                <field name="question" string="Câu hỏi"/>
+                <field name="project_id" string="Dự án"/>
+                <field name="task_id" string="Công việc"/>
+                <filter string="Hoàn thành" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Đang xử lý" name="processing" domain="[('state', '=', 'processing')]"/>
+                <filter string="Lỗi" name="error" domain="[('state', '=', 'error')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_project_ai_qa" model="ir.actions.act_window">
+        <field name="name">AI Q&amp;A</field>
+        <field name="res_model">project.ai.qa</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Hỏi AI về dự án của bạn!
+            </p>
+            <p>
+                Tạo câu hỏi mới để AI trả lời dựa trên dữ liệu dự án.
+            </p>
+        </field>
+    </record>
+</odoo>

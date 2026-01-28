@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu chính -->
+    <menuitem id="menu_project_root" name="Quản lý Dự án" sequence="10"/>
+
+    <!-- Menu Dự án -->
+    <menuitem id="menu_project_project" 
+              name="Dự án" 
+              parent="menu_project_root" 
+              action="action_project_project" 
+              sequence="10"/>
+
+    <!-- Menu Milestone -->
+    <menuitem id="menu_project_milestone" 
+              name="Giai đoạn" 
+              parent="menu_project_root" 
+              action="action_project_milestone" 
+              sequence="20"/>
+</odoo>

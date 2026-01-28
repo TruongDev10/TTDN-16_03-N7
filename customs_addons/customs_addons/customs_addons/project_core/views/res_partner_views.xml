@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Force Enable Delete on Kanban -->
+    <record id="view_partner_kanban_inherit_delete" model="ir.ui.view">
+        <field name="name">res.partner.kanban.inherit.delete</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="delete">true</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Force Enable Delete on Tree -->
+    <record id="view_partner_tree_inherit_delete" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.delete</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="delete">true</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Server Action to Cleanup Demo Data -->
+    <record id="action_cleanup_english_customers" model="ir.actions.server">
+        <field name="name">Xóa dữ liệu mẫu (Tiếng Anh)</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = record.action_cleanup_demo_data()
+        </field>
+    </record>
+</odoo>

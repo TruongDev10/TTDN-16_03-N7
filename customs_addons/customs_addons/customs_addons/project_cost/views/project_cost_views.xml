@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Danh sách chi phí -->
+    <record id="view_project_cost_line_tree" model="ir.ui.view">
+        <field name="name">project.cost.line.tree</field>
+        <field name="model">project.cost.line</field>
+        <field name="arch" type="xml">
+            <tree string="Chi phí" decoration-info="state=='confirmed'" decoration-success="state=='paid'" decoration-muted="state=='draft'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="employee_id"/>
+                <field name="hours"/>
+                <field name="hourly_rate"/>
+                <field name="cost_amount" sum="Tổng"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="state" widget="badge" decoration-info="state=='confirmed'" decoration-success="state=='paid'" decoration-muted="state=='draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: Form chi phí -->
+    <record id="view_project_cost_line_form" model="ir.ui.view">
+        <field name="name">project.cost.line.form</field>
+        <field name="model">project.cost.line</field>
+        <field name="arch" type="xml">
+            <form string="Chi phí">
+                <header>
+                    <button name="action_confirm" string="Xác nhận" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_set_invoiced" string="Đã xuất hóa đơn" type="object" attrs="{'invisible': [('state', 'not in', ['confirmed'])]}"/>
+                    <button name="action_set_paid" string="Đã thanh toán" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'invoiced')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced,paid"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Mô tả chi phí..."/>
+                            <field name="date"/>
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="task_id" domain="[('project_id', '=', project_id)]" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="timesheet_id" options="{'no_create': True}"/>
+                            <field name="currency_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <group string="Chi phí">
+                        <group>
+                            <field name="hours"/>
+                            <field name="hourly_rate"/>
+                            <field name="cost_amount" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Tìm kiếm chi phí -->
+    <record id="view_project_cost_line_search" model="ir.ui.view">
+        <field name="name">project.cost.line.search</field>
+        <field name="model">project.cost.line</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Chi phí">
+                <field name="name" string="Mô tả"/>
+                <field name="project_id" string="Dự án"/>
+                <field name="task_id" string="Công việc"/>
+                <field name="employee_id" string="Nhân viên"/>
+                <filter string="Nháp" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Đã xác nhận" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Đã xuất hóa đơn" name="invoiced" domain="[('state', '=', 'invoiced')]"/>
+                <filter string="Đã thanh toán" name="paid" domain="[('state', '=', 'paid')]"/>
+                <group expand="0" string="Nhóm">
+                    <filter string="Theo Dự án" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="Theo Công việc" name="group_task" context="{'group_by': 'task_id'}"/>
+                    <filter string="Theo Nhân viên" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Theo Trạng thái" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Theo Ngày" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Mở danh sách chi phí -->
+    <record id="action_project_cost_line" model="ir.actions.act_window">
+        <field name="name">Chi phí</field>
+        <field name="res_model">project.cost.line</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo chi phí đầu tiên của bạn!
+            </p>
+            <p>
+                Quản lý tất cả các chi phí của dự án.
+            </p>
+        </field>
+    </record>
+</odoo>

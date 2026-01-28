@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="project_ai_qa.AIQAWidget">
+        <div class="ai-qa-widget">
+            <h3>Hỏi AI về Dự án</h3>
+            <input 
+                type="text" 
+                class="question-input" 
+                placeholder="Nhập câu hỏi của bạn..."
+                t-model="state.question"
+            />
+            <button 
+                class="ask-button" 
+                t-on-click="askAI"
+                t-att-disabled="state.loading"
+            >
+                <t t-if="state.loading">Đang xử lý...</t>
+                <t t-if="!state.loading">Hỏi AI</t>
+            </button>
+            <div class="answer-area" t-if="state.answer">
+                <t t-raw="state.answer"/>
+            </div>
+            <div class="loading" t-if="state.loading">
+                Đang xử lý câu hỏi...
+            </div>
+        </div>
+    </t>
+</templates>

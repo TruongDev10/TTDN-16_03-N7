@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+
+from . import project_project
+from . import project_milestone
+from . import project_tag
+from . import res_partner

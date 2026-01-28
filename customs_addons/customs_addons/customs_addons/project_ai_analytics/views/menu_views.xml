@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Đánh giá AI -->
+    <menuitem id="menu_project_ai_analytics" 
+              name="Đánh giá AI" 
+              parent="project_core.menu_project_root" 
+              action="action_project_ai_evaluation" 
+              sequence="80"/>
+</odoo>

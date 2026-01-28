@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Settings to add AI Configuration -->
+    <record id="res_config_settings_view_form_inherit_ai" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ai</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="AI Đánh giá" string="AI Đánh giá" data-key="project_ai_analytics">
+                    <h2>Cấu hình AI Đánh giá Tiến độ</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="ai_enabled"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="ai_enabled"/>
+                                <div class="text-muted">
+                                    Bật tính năng đánh giá tiến độ công việc bằng Google Gemini AI
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('ai_enabled', '=', False)]}">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="ai_api_key" string="API Key"/>
+                                <field name="ai_api_key" placeholder="AIzaSy..." class="oe_inline" password="True"/>
+                                <div class="text-muted">
+                                    Lấy API key miễn phí tại: <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('ai_enabled', '=', False)]}">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="ai_model" string="Model"/>
+                                <field name="ai_model" placeholder="gemini-2.0-flash-exp"/>
+                                <div class="text-muted">
+                                    Model Gemini để sử dụng (mặc định: gemini-2.0-flash-exp)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('ai_enabled', '=', False)]}">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="ai_base_url" string="Base URL"/>
+                                <field name="ai_base_url"/>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('ai_enabled', '=', False)]}">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="ai_timeout" string="Timeout (giây)"/>
+                                <field name="ai_timeout"/>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('ai_enabled', '=', False)]}">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="ai_completion_threshold" string="Ngưỡng điểm hoàn thành"/>
+                                <field name="ai_completion_threshold"/>
+                                <div class="text-muted">
+                                    Điểm số tối thiểu từ AI (0-100) để có thể đánh dấu dự án là Hoàn thành.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

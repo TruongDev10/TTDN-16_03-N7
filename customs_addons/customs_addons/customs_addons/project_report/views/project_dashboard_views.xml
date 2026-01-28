@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Graph View: Báo cáo dự án theo trạng thái -->
+    <record id="view_project_project_graph" model="ir.ui.view">
+        <field name="name">project.project.graph</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <graph string="Báo cáo Dự án" type="bar" stacked="True">
+                <field name="state" type="row"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View: Báo cáo dự án -->
+    <record id="view_project_project_pivot" model="ir.ui.view">
+        <field name="name">project.project.pivot</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo Dự án">
+                <field name="state" type="row"/>
+                <field name="user_id" type="col"/>
+                <field name="total_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View: Báo cáo công việc theo trạng thái -->
+    <record id="view_project_task_graph" model="ir.ui.view">
+        <field name="name">project.task.graph</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <graph string="Báo cáo Công việc" type="bar" stacked="True">
+                <field name="state" type="row"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View: Báo cáo công việc -->
+    <record id="view_project_task_pivot" model="ir.ui.view">
+        <field name="name">project.task.pivot</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo Công việc">
+                <field name="state" type="row"/>
+                <field name="project_id" type="col"/>
+                <field name="planned_hours" type="measure"/>
+                <field name="effective_hours" type="measure"/>
+                <field name="total_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View: Báo cáo timesheet -->
+    <record id="view_account_analytic_line_graph" model="ir.ui.view">
+        <field name="name">account.analytic.line.graph</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <graph string="Báo cáo Timesheet" type="bar">
+                <field name="date" type="row" interval="week"/>
+                <field name="unit_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View: Báo cáo timesheet -->
+    <record id="view_account_analytic_line_pivot" model="ir.ui.view">
+        <field name="name">account.analytic.line.pivot</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo Timesheet">
+                <field name="date" type="row" interval="week"/>
+                <field name="employee_id" type="col"/>
+                <field name="unit_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View: Báo cáo chi phí -->
+    <record id="view_project_cost_line_graph" model="ir.ui.view">
+        <field name="name">project.cost.line.graph</field>
+        <field name="model">project.cost.line</field>
+        <field name="arch" type="xml">
+            <graph string="Báo cáo Chi phí" type="bar">
+                <field name="date" type="row" interval="week"/>
+                <field name="cost_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View: Báo cáo chi phí -->
+    <record id="view_project_cost_line_pivot" model="ir.ui.view">
+        <field name="name">project.cost.line.pivot</field>
+        <field name="model">project.cost.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo Chi phí">
+                <field name="date" type="row" interval="week"/>
+                <field name="project_id" type="col"/>
+                <field name="employee_id" type="col"/>
+                <field name="cost_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action: Dashboard tổng quan -->
+    <record id="action_project_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Dự án</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

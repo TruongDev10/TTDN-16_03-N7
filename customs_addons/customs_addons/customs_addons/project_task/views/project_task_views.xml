@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Danh sách công việc -->
+    <record id="view_project_task_tree" model="ir.ui.view">
+        <field name="name">project.task.tree</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <tree string="Công việc" decoration-info="state=='in_progress'" decoration-warning="state=='review'" decoration-success="state=='done'" decoration-muted="state=='cancelled'" decoration-danger="priority=='3'">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="parent_id" invisible="context.get('hide_parent', False)"/>
+                <field name="date_deadline"/>
+                <field name="state" widget="badge" decoration-info="state=='in_progress'" decoration-warning="state=='review'" decoration-success="state=='done'" decoration-danger="state=='cancelled'"/>
+                <field name="priority" widget="priority" invisible="1"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="planned_hours"/>
+                <field name="effective_hours"/>
+                <field name="subtask_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: Form công việc -->
+    <record id="view_project_task_form" model="ir.ui.view">
+        <field name="name">project.task.form</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <form string="Công việc">
+                <header>
+                    <button name="action_set_todo" string="Cần làm" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_set_in_progress" string="Bắt đầu" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft', 'todo', 'review'])]}"/>
+                    <button name="action_set_review" string="Xem xét" type="object" attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_set_done" string="Hoàn thành" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['done', 'cancelled'])]}"/>
+                    <button name="action_set_cancelled" string="Hủy" type="object" attrs="{'invisible': [('state', 'in', ['done', 'cancelled'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,todo,in_progress,review,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_subtasks" type="object" class="oe_stat_button" icon="fa-tasks" context="{'default_parent_id': id, 'default_project_id': project_id}">
+                            <field name="subtask_count" widget="statinfo" string="Subtask"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Tên công việc..."/>
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="parent_id" domain="[('project_id', '=', project_id), ('id', '!=', id)]" options="{'no_create': True}" attrs="{'invisible': [('is_subtask', '=', False)]}"/>
+                            <field name="is_subtask" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_deadline"/>
+                            <field name="date_end" readonly="1"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Mô tả chi tiết về công việc..."/>
+                    </group>
+                    <group string="Thời gian &amp; Tiến độ">
+                        <group>
+                            <field name="planned_hours"/>
+                            <field name="effective_hours" readonly="1"/>
+                            <field name="remaining_hours" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Subtask" name="subtasks">
+                            <field name="child_ids" nolabel="1" context="{'default_parent_id': id, 'default_project_id': project_id, 'hide_parent': True}">
+                                <tree string="Subtask">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="date_deadline"/>
+                                    <field name="progress" widget="progressbar"/>
+                                    <field name="planned_hours"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Nhãn" name="tags">
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View: Kanban công việc -->
+    <record id="view_project_task_kanban" model="ir.ui.view">
+        <field name="name">project.task.kanban</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="parent_id"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="date_deadline"/>
+                <field name="progress"/>
+                <field name="planned_hours"/>
+                <field name="subtask_count"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <strong><field name="name"/></strong>
+                                    <field name="parent_id" invisible="context.get('hide_parent', False)"/>
+                                </div>
+                                <div class="o_kanban_card_header_right">
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <field name="project_id"/>
+                                <div class="mt-2">
+                                    <span>Tiến độ: </span>
+                                    <field name="progress" widget="progressbar"/>
+                                </div>
+                                <div class="mt-2">
+                                    <span>Giờ công: </span>
+                                    <field name="planned_hours"/>h
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_footer">
+                                <field name="date_deadline"/>
+                                <field name="subtask_count" widget="statinfo" string="Subtask"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View: Tìm kiếm công việc -->
+    <record id="view_project_task_search" model="ir.ui.view">
+        <field name="name">project.task.search</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Công việc">
+                <field name="name" string="Tên"/>
+                <field name="project_id" string="Dự án"/>
+                <field name="parent_id" string="Công việc cha"/>
+                <filter string="Cần làm" name="todo" domain="[('state', '=', 'todo')]"/>
+                <filter string="Đang làm" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Đang xem xét" name="review" domain="[('state', '=', 'review')]"/>
+                <filter string="Hoàn thành" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Đã hủy" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Ưu tiên cao" name="high_priority" domain="[('priority', 'in', ['2', '3'])]"/>
+                <filter string="Quá hạn" name="overdue" domain="[('date_deadline', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', 'not in', ['done', 'cancelled'])]"/>
+                <filter string="Subtask" name="subtask" domain="[('parent_id', '!=', False)]"/>
+                <group expand="0" string="Nhóm">
+                    <filter string="Theo Trạng thái" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Theo Dự án" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="Theo Độ ưu tiên" name="group_priority" context="{'group_by': 'priority'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Mở danh sách công việc -->
+    <record id="action_project_task" model="ir.actions.act_window">
+        <field name="name">Công việc</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">tree,form,kanban,graph,pivot,calendar</field>
+        <field name="context">{'search_default_todo': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo công việc đầu tiên của bạn!
+            </p>
+            <p>
+                Quản lý tất cả các công việc của bạn từ một nơi duy nhất.
+            </p>
+        </field>
+    </record>
+</odoo>

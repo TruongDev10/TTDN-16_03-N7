@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu AI Q&A -->
+    <menuitem id="menu_project_ai_qa" 
+              name="AI Q&amp;A" 
+              parent="project_core.menu_project_root" 
+              action="action_project_ai_qa" 
+              sequence="70"/>
+</odoo>

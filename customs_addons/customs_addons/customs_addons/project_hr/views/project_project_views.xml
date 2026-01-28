@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Project Form View -->
+    <record id="view_project_project_form_inherit_hr" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.hr</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_core.view_project_project_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm button box cho nhân viên -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_employees" type="object" class="oe_stat_button" icon="fa-users" context="{'default_project_id': id}">
+                    <field name="employee_count" widget="statinfo" string="Nhân viên"/>
+                </button>
+            </xpath>
+            
+            <!-- Thêm tab nhân viên -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Nhân viên" name="employees">
+                    <field name="employee_ids" nolabel="1">
+                        <tree string="Nhân viên">
+                            <field name="name"/>
+                            <field name="job_id"/>
+                            <field name="department_id"/>
+                            <field name="hourly_rate"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

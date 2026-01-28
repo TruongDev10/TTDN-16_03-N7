@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Task Form View -->
+    <record id="view_project_task_form_inherit_cost" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.cost</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project_task.view_project_task_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm button box cho chi phí -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_costs" type="object" class="oe_stat_button" icon="fa-money" context="{'default_task_id': id, 'default_project_id': project_id}">
+                    <field name="cost_count" widget="statinfo" string="Chi phí"/>
+                </button>
+            </xpath>
+            
+            <!-- Thêm field tổng chi phí -->
+            <xpath expr="//group[field[@name='planned_hours']]" position="after">
+                <group string="Chi phí">
+                    <field name="total_cost" readonly="1"/>
+                    <button name="action_compute_cost_from_timesheet" string="Tính chi phí từ Timesheet" type="object" class="btn-secondary"/>
+                </group>
+            </xpath>
+            
+            <!-- Thêm tab chi phí -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Chi phí" name="costs">
+                    <field name="cost_line_ids" nolabel="1" context="{'default_task_id': id, 'default_project_id': project_id}">
+                        <tree string="Chi phí">
+                            <field name="date"/>
+                            <field name="employee_id"/>
+                            <field name="hours"/>
+                            <field name="hourly_rate"/>
+                            <field name="cost_amount" sum="Tổng"/>
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Task Form View -->
+    <record id="view_project_task_form_inherit_timesheet" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.timesheet</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project_task.view_project_task_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm button box cho timesheet -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_timesheets" type="object" class="oe_stat_button" icon="fa-clock-o" context="{'default_task_id': id, 'default_project_id': project_id}">
+                    <field name="timesheet_count" widget="statinfo" string="Timesheet"/>
+                </button>
+            </xpath>
+            
+            <!-- Thêm tab timesheet -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Timesheet" name="timesheets">
+                    <field name="timesheet_ids" nolabel="1" context="{'default_task_id': id, 'default_project_id': project_id}">
+                        <tree string="Timesheet">
+                            <field name="date"/>
+                            <field name="employee_id"/>
+                            <field name="name"/>
+                            <field name="unit_amount" string="Giờ công"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="public_project_info" name="Thông tin Dự án Công khai">
+        <t t-call="website.layout">
+            <t t-set="title" t-esc="project.name"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h1><t t-esc="project.name"/></h1>
+                            <t t-if="show_progress">
+                                <div class="mt-3">
+                                    <h3>Tiến độ: <t t-esc="project.progress"/>%</h3>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" t-attf-style="width: #{project.progress}%">
+                                            <t t-esc="project.progress"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            
+                            <t t-if="show_members and hasattr(project, 'employee_ids')">
+                                <div class="mt-3">
+                                    <h3>Thành viên</h3>
+                                    <ul>
+                                        <t t-foreach="project.employee_ids" t-as="emp">
+                                            <li><t t-esc="emp.name"/></li>
+                                        </t>
+                                    </ul>
+                                </div>
+                            </t>
+                            
+                            <t t-if="show_progress and latest_evaluation">
+                                <div class="mt-3">
+                                    <h3>Đánh giá AI mới nhất</h3>
+                                    <div t-raw="latest_evaluation.ai_evaluation"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Danh sách đánh giá -->
+    <record id="view_project_ai_evaluation_tree" model="ir.ui.view">
+        <field name="name">project.ai.evaluation.tree</field>
+        <field name="model">project.ai.evaluation</field>
+        <field name="arch" type="xml">
+            <tree string="Đánh giá AI" decoration-info="state=='processing'" decoration-success="state=='done'" decoration-danger="state=='error'">
+                <field name="evaluation_date"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="current_progress" widget="progressbar"/>
+                <field name="days_remaining"/>
+                <field name="is_overdue" widget="boolean_toggle"/>
+                <field name="ai_score"/>
+                <field name="state" widget="badge" decoration-info="state=='processing'" decoration-success="state=='done'" decoration-danger="state=='error'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: Form đánh giá -->
+    <record id="view_project_ai_evaluation_form" model="ir.ui.view">
+        <field name="name">project.ai.evaluation.form</field>
+        <field name="model">project.ai.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Đánh giá AI">
+                <header>
+                    <button name="action_evaluate" string="Đánh giá bằng AI" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['done', 'processing'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="evaluation_date"/>
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="task_id" domain="[('project_id', '=', project_id)]" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="is_public"/>
+                            <field name="current_progress" widget="progressbar"/>
+                            <field name="deadline_date"/>
+                            <field name="days_remaining"/>
+                            <field name="is_overdue" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <group string="Thông tin Thành viên">
+                        <field name="member_count" readonly="1"/>
+                        <field name="team_members" readonly="1" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Đánh giá AI" name="ai_evaluation">
+                            <group>
+                                <field name="ai_score" widget="progressbar" attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                                <field name="ai_evaluation" nolabel="1" attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_project_ai_evaluation_search" model="ir.ui.view">
+        <field name="name">project.ai.evaluation.search</field>
+        <field name="model">project.ai.evaluation</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Đánh giá">
+                <field name="name" string="Tên"/>
+                <field name="project_id" string="Dự án"/>
+                <field name="task_id" string="Công việc"/>
+                <filter string="Quá hạn" name="overdue" domain="[('is_overdue', '=', True)]"/>
+                <filter string="Hoàn thành" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Công khai" name="public" domain="[('is_public', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_project_ai_evaluation" model="ir.actions.act_window">
+        <field name="name">Đánh giá AI</field>
+        <field name="res_model">project.ai.evaluation</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo đánh giá AI đầu tiên!
+            </p>
+            <p>
+                Sử dụng AI để đánh giá tiến độ dự án và công việc.
+            </p>
+        </field>
+    </record>
+</odoo>
