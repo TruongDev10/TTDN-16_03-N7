@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence cho mã dự án -->
+        <record id="sequence_project_code" model="ir.sequence">
+            <field name="name">Mã Dự án</field>
+            <field name="code">project.project</field>
+            <field name="prefix">PRJ</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+    </data>
+</odoo>

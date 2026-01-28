@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Chi phí -->
+    <menuitem id="menu_project_cost" 
+              name="Chi phí" 
+              parent="project_core.menu_project_root" 
+              action="action_project_cost_line" 
+              sequence="50"/>
+</odoo>

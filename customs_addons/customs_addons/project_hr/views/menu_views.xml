@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu này sẽ được thêm vào menu HR hoặc Project tùy theo yêu cầu -->
+    <!-- Các view đã được extend vào các form view hiện có -->
+</odoo>

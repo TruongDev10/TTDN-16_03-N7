@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report: Báo cáo dự án PDF -->
+    <record id="report_project_project" model="ir.actions.report">
+        <field name="name">Báo cáo Dự án</field>
+        <field name="model">project.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">project_report.report_project_project</field>
+        <field name="report_file">project_report.template_report_project_project</field>
+        <field name="binding_model_id" ref="project_core.model_project_project"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Template: Báo cáo dự án -->
+    <template id="template_report_project_project">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Báo cáo Dự án</h2>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td><strong>Mã dự án:</strong></td>
+                                    <td><t t-esc="doc.code"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tên dự án:</strong></td>
+                                    <td><t t-esc="doc.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Khách hàng:</strong></td>
+                                    <td><t t-esc="doc.partner_id.name or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ngày bắt đầu:</strong></td>
+                                    <td><t t-esc="doc.date_start"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ngày kết thúc:</strong></td>
+                                    <td><t t-esc="doc.date_end or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Trạng thái:</strong></td>
+                                    <td><t t-esc="dict(doc._fields['state'].selection)[doc.state]"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tiến độ:</strong></td>
+                                    <td><t t-esc="doc.progress"/>%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tổng giờ công:</strong></td>
+                                    <td><t t-esc="doc.total_hours"/>h</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tổng chi phí:</strong></td>
+                                    <td><t t-esc="doc.total_cost"/></td>
+                                </tr>
+                            </table>
+                            <h3>Công việc</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tên công việc</th>
+                                        <th>Trạng thái</th>
+                                        <th>Tiến độ</th>
+                                        <th>Giờ công dự kiến</th>
+                                        <th>Giờ công thực tế</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.task_ids" t-as="task">
+                                        <tr>
+                                            <td><t t-esc="task.name"/></td>
+                                            <td><t t-esc="dict(task._fields['state'].selection)[task.state]"/></td>
+                                            <td><t t-esc="task.progress"/>%</td>
+                                            <td><t t-esc="task.planned_hours"/>h</td>
+                                            <td><t t-esc="task.effective_hours"/>h</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report: Báo cáo công việc PDF -->
+    <record id="report_project_task" model="ir.actions.report">
+        <field name="name">Báo cáo Công việc</field>
+        <field name="model">project.task</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">project_report.report_project_task</field>
+        <field name="report_file">project_report.template_report_project_task</field>
+        <field name="binding_model_id" ref="project_task.model_project_task"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Template: Báo cáo công việc -->
+    <template id="template_report_project_task">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Báo cáo Công việc</h2>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td><strong>Tên công việc:</strong></td>
+                                    <td><t t-esc="doc.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dự án:</strong></td>
+                                    <td><t t-esc="doc.project_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ngày deadline:</strong></td>
+                                    <td><t t-esc="doc.date_deadline or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Trạng thái:</strong></td>
+                                    <td><t t-esc="dict(doc._fields['state'].selection)[doc.state]"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tiến độ:</strong></td>
+                                    <td><t t-esc="doc.progress"/>%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Giờ công dự kiến:</strong></td>
+                                    <td><t t-esc="doc.planned_hours"/>h</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Giờ công thực tế:</strong></td>
+                                    <td><t t-esc="doc.effective_hours"/>h</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tổng chi phí:</strong></td>
+                                    <td><t t-esc="doc.total_cost"/></td>
+                                </tr>
+                            </table>
+                            <h3>Timesheet</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Ngày</th>
+                                        <th>Nhân viên</th>
+                                        <th>Mô tả</th>
+                                        <th>Giờ công</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.timesheet_ids" t-as="timesheet">
+                                        <tr>
+                                            <td><t t-esc="timesheet.date"/></td>
+                                            <td><t t-esc="timesheet.employee_id.name or timesheet.user_id.name or ''"/></td>
+                                            <td><t t-esc="timesheet.name"/></td>
+                                            <td><t t-esc="timesheet.unit_amount"/>h</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

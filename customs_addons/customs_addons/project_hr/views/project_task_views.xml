@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Task Form View -->
+    <record id="view_project_task_form_inherit_hr" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.hr</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project_task.view_project_task_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm button box cho nhân viên -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_employees" type="object" class="oe_stat_button" icon="fa-users" context="{'default_task_id': id}">
+                    <field name="employee_count" widget="statinfo" string="Nhân viên"/>
+                </button>
+            </xpath>
+            
+            <!-- Thêm field nhân viên vào group -->
+            <xpath expr="//group[field[@name='name']]" position="after">
+                <group string="Người thực hiện">
+                    <field name="user_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

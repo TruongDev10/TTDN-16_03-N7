@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Báo cáo -->
+    <menuitem id="menu_project_report" 
+              name="Báo cáo" 
+              parent="project_core.menu_project_root" 
+              sequence="60"/>
+
+    <!-- Menu Dashboard -->
+    <menuitem id="menu_project_dashboard" 
+              name="Dashboard" 
+              parent="menu_project_report" 
+              action="action_project_dashboard" 
+              sequence="10"/>
+</odoo>

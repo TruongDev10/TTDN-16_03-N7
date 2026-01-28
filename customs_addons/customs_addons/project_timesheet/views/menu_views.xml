@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Timesheet -->
+    <menuitem id="menu_project_timesheet" 
+              name="Timesheet" 
+              parent="project_core.menu_project_root" 
+              action="action_account_analytic_line_project" 
+              sequence="40"/>
+</odoo>

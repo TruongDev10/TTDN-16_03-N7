@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Danh sách dự án -->
+    <record id="view_project_project_tree" model="ir.ui.view">
+        <field name="name">project.project.tree</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <tree string="Dự án" decoration-info="state=='active'" decoration-warning="state=='on_hold'" decoration-success="state=='done'" decoration-muted="state=='cancelled'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state" widget="badge" decoration-info="state=='active'" decoration-warning="state=='on_hold'" decoration-success="state=='done'" decoration-danger="state=='cancelled'"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="milestone_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: Form dự án -->
+    <record id="view_project_project_form" model="ir.ui.view">
+        <field name="name">project.project.form</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <form string="Dự án">
+                <header>
+                    <button name="action_set_active" string="Bắt đầu" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_set_on_hold" string="Tạm dừng" type="object" attrs="{'invisible': [('state', 'not in', ['active'])]}"/>
+                    <button name="action_set_done" string="Hoàn thành" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['done', 'cancelled'])]}"/>
+                    <button name="action_set_cancelled" string="Hủy" type="object" attrs="{'invisible': [('state', 'in', ['done', 'cancelled'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,on_hold,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_milestones" type="object" class="oe_stat_button" icon="fa-tasks" context="{'default_project_id': id}">
+                            <field name="milestone_count" widget="statinfo" string="Milestone"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="progress" widget="progressbar"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Mô tả chi tiết về dự án..."/>
+                    </group>
+                    <notebook>
+                        <page string="Milestone" name="milestones">
+                            <field name="milestone_ids" nolabel="1">
+                                <tree string="Milestone">
+                                    <field name="name"/>
+                                    <field name="date_deadline"/>
+                                    <field name="date_achieved"/>
+                                    <field name="state" widget="badge" decoration-info="state=='in_progress'" decoration-success="state=='achieved'" decoration-danger="state=='missed'"/>
+                                    <field name="is_overdue" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Nhãn" name="tags">
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Tìm kiếm dự án -->
+    <record id="view_project_project_search" model="ir.ui.view">
+        <field name="name">project.project.search</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Dự án">
+                <field name="name" string="Tên"/>
+                <field name="code" string="Mã"/>
+                <field name="partner_id" string="Khách hàng"/>
+                <field name="user_id" string="Người quản lý"/>
+                <filter string="Đang thực hiện" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Tạm dừng" name="on_hold" domain="[('state', '=', 'on_hold')]"/>
+                <filter string="Hoàn thành" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Đã hủy" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Quá hạn" name="overdue" domain="[('date_end', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', 'not in', ['done', 'cancelled'])]"/>
+                <group expand="0" string="Nhóm">
+                    <filter string="Theo Trạng thái" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Theo Người quản lý" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Theo Khách hàng" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Mở danh sách dự án -->
+    <record id="action_project_project" model="ir.actions.act_window">
+        <field name="name">Dự án</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">tree,form,kanban,graph,pivot,calendar</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo dự án đầu tiên của bạn!
+            </p>
+            <p>
+                Quản lý tất cả các dự án của bạn từ một nơi duy nhất.
+            </p>
+        </field>
+    </record>
+</odoo>
